@@ -1,0 +1,117 @@
+.t {
+    border-collapse:collapse;
+    background-color:#FFFFFF;
+    border: #666699 solid 2px;
+    /*float: none;*/
+    /*margin:auto;*/
+    /*display: table;*/
+    width: 350px;
+    height: 350px;
+}
+
+.tw{
+    border-collapse:collapse;
+    background-color: rgba(229, 3, 49, 0.5) !important;
+    border: #666699 solid 2px;
+    /*float: none;*/
+    /*margin:auto;*/
+    /*display: table;*/
+    width: 350px;
+    height: 350px;
+}
+
+.b{
+    /*float: none;*/
+    margin:20px auto;
+}
+
+.g {
+    /*width:24pt;*/
+    /*height:25pt;*/
+    /*vertical-align:middle;*/
+    /*text-align:center;*/
+    font-size:18pt;
+    font-family:times,serif;
+    background-color: transparent;
+}
+
+.d{
+    -webkit-appearance: none;
+    outline:none;
+    border: solid 0 #fff;
+    text-align:center;
+    /*margin:0;*/
+    padding: 0;
+    width:100%;
+    height: 100%;
+    background-color: transparent;
+}
+
+td .my-invalid{
+    background-color: rgba(229, 3, 49, 0.5);
+}
+
+td .my-valid{
+    background-color: transparent;
+}
+
+td .gr{
+    background-color: rgba(219, 158, 255, 0.6);
+}
+
+.r3, .r6 {
+    border-top: #666699 solid 2px;
+}
+.c3, .c6 {
+    border-left: #666699 solid 2px;
+}
+
+.r0, .r1, .r3, .r4, .r6, .r7{
+    border-bottom: #666699 solid 1px;
+}
+
+.c0, .c1, .c3, .c4, .c6, .c7{
+    border-right: #666699 solid 1px;
+}
+
+.vertical-center {
+    min-height: 100%;  /* Fallback for vh unit */
+    min-height: 100vh; /* You might also want to use
+                        'height' property instead.
+
+                        Note that for percentage values of
+                        'height' or 'min-height' properties,
+                        the 'height' of the parent element
+                        should be specified explicitly.
+
+                        In this case the parent of '.vertical-center'
+                        is the <body> element */
+
+    /* Make it a flex container */
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+
+    /* Align the bootstrap's container vertically */
+    -webkit-box-align : center;
+    -webkit-align-items : center;
+    -moz-box-align : center;
+    -ms-flex-align : center;
+    align-items : center;
+
+    /* In legacy web browsers such as Firefox 9
+       we need to specify the width of the flex container */
+    /*width: 100%;*/
+
+    /* Also 'margin: 0 auto' doesn't have any effect on flex items in such web browsers
+       hence the bootstrap's container won't be aligned to the center anymore.
+
+       Therefore, we should use the following declarations to get it centered again */
+    -webkit-box-pack : center;
+    -moz-box-pack : center;
+    -ms-flex-pack : center;
+    -webkit-justify-content : center;
+    justify-content : center;
+}
