@@ -97,7 +97,7 @@ td .gr{
 
 .vertical-center {
     min-height: 100%;  /* Fallback for vh unit */
-    min-height: 100vh; /* You might also want to use
+    min-height: 85vh; /* You might also want to use
                         'height' property instead.
 
                         Note that for percentage values of
