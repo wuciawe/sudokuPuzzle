@@ -1,0 +1,62 @@
+@()
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Sudoku Puzzle</title>
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap-theme.min.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/style20.css")">
+        <link rel="shortcut icon" type="image/png" href="https://wuciawe.github.io/favicon.png">
+        <script src="@routes.Assets.at("javascripts/jquery-1.11.1.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/bootstrap.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/angular.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/puzzle.js")" type="text/javascript"></script>
+
+    </head>
+    <body data-ng-app="sudokuApp">
+        <div class="container">
+            <div class="row" data-ng-controller="solverController">
+                <div class="col-md-6 vertical-center">
+                        <table cellspacing="0" cellpadding="0" class="t">
+                            <tbody>
+                                <tr data-ng-repeat="row in sudokuData.oData.rows">
+                                    <td class="g r{{row.rid}} c{{col.cid}}" data-ng-repeat="col in row.cols">
+                                        <data-my-sudoku-input data-my-model="col.vl" data-rawid="{{row.rid + ' ' + col.cid}}"></data-my-sudoku-input>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                </div>
+                <div class="col-md-6 vertical-center">
+                    <ul class="text-center list-unstyled">
+                        <li>
+                            <span data-ng-show="sudokuData.pristine === 81 && !sudokuData.showres" class="alert alert-warning" role="alert">Do not let the sudoku blank, give a problem to play.</span>
+                        </li>
+                        <li>
+                            <span data-ng-show="sudokuData.invalid !== 0 && !sudokuData.showres" class="alert alert-danger" role="alert">Invalid input found! Only digits from 1 to 9 allowed.</span>
+                        </li>
+                        <li>
+                            <button class="btn btn-lg b" data-ng-class="{'btn-warning':sudokuData.pristine === 81, 'btn-danger':sudokuData.invalid !== 0, 'btn-info':sudokuData.pristine !== 81 && sudokuData.invalid === 0}" data-ng-click="solveit()" data-ng-show="!sudokuData.showres" data-ng-disabled="sudokuData.invalid !== 0">Solve It</button>
+                        </li>
+                        <li>
+                            <table cellspacing="0" cellpadding="0" data-ng-class="sudokuData.solvable ? 't' : 'tw' " data-ng-show="sudokuData.showres">
+                                <tbody>
+                                    <tr data-ng-repeat="row in sudokuData.solution.rows">
+                                        <td class="g r{{row.rid}} c{{col.cid}}" data-ng-repeat="col in row.cols">
+                                            <input class="d" ng-class="{'gr' : mirror(row.rid, col.cid)}" autocomplete="off" data-ng-model="col.vl" data-ng-readonly="true">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </li>
+                        <li>
+                            <span data-ng-show="!sudokuData.solvable && sudokuData.showres" class="alert alert-danger" role="alert"><strong>Not Solvable!!!</strong></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
