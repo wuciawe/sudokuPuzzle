@@ -5,6 +5,7 @@
 <html>
     <head>
         <title>Sudoku Puzzle</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap-theme.min.css")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/style20.css")">
@@ -16,9 +17,10 @@
 
     </head>
     <body data-ng-app="sudokuApp">
+
         <div class="container">
             <div class="row" data-ng-controller="solverController">
-                <div class="col-md-6 vertical-center">
+                <div class="col-xs-12 col-sm-6 vertical-center">
                         <table cellspacing="0" cellpadding="0" class="t">
                             <tbody>
                                 <tr data-ng-repeat="row in sudokuData.oData.rows">
@@ -29,7 +31,7 @@
                             </tbody>
                         </table>
                 </div>
-                <div class="col-md-6 vertical-center">
+                <div class="col-xs-12 col-sm-6 vertical-center">
                     <ul class="text-center list-unstyled">
                         <li>
                             <span data-ng-show="sudokuData.pristine === 81 && !sudokuData.showres" class="alert alert-warning" role="alert">Do not let the sudoku blank, give a problem to play.</span>
