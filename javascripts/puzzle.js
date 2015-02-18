@@ -108,7 +108,7 @@ function search(values){
 
     if (max == 1)
         return values;
-    for (var d = 0; d < len; d++){
+    for (var d = 0; d < min; d++){
         var res = search(assign(dup(values), sq, values[sq].charAt(d)));
         if (res)
             return res;
