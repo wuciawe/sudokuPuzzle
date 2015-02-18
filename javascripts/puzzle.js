@@ -1,6 +1,136 @@
 /**
  * Created by haha on 2015/2/16.
  */
+
+function crs(R, C) {
+    var Res = {};
+    for (var a in R)
+        for (var b in C)
+            Res[R[a] + C[b]] = true;
+    return Res;
+}
+
+var digits = "123456789";
+var ls = ["0","1","2","3","4","5","6","7","8"];
+var sqrIdx = crs(ls, ls);
+var uList = function(){
+    var unitlist = [];
+    for(var i in ls){
+        unitlist.push(crs(ls, [ls[i]]));
+        unitlist.push(crs([ls[i]], ls));
+    }
+    var lls = [["0", "1", "2"], ["3", "4", "5"], ["6", "7", "8"]];
+    for(var rs in lls)
+        for(var cs in lls)
+            unitlist.push(crs(lls[rs], lls[cs]));
+    return unitlist;
+}();
+var units = function(){
+    var us = {};
+    for (var s in sqrIdx){
+        us[s] = [];
+        for (var u in uList)
+            if(uList[u][s])
+                us[s].push(uList[u]);
+    }
+    return us;
+}();
+var peers = function(){
+    var ps = {};
+    for (var s1 in sqrIdx){
+        ps[s1] = {};
+        for (var u in units[s1]){
+            for (var s2 in units[s1][u])
+                if (s2 != s1)
+                    ps[s1][s2] = true;
+        }
+    }
+    return ps;
+}();
+
+function eliminate(values, sq, dig){
+    if (values[sq].indexOf(dig) == -1)  // already eliminated.
+        return values;
+    values[sq] = values[sq].replace(dig, "");
+    if (values[sq].length == 0) // invalid input ?
+        return false;
+    else if (values[sq].length == 1){ // If there is only one value (values[sq]) left in square, remove it from peers
+        var result = true;
+        for (var s in peers[sq])
+            result &= (eliminate(values, s, values[sq]) ? true : false);
+        if (!result) return false;
+    }
+    for(var u in units[sq]){
+        var iunit = units[sq][u];
+        var dplaces = [];
+        for(var s in iunit){
+            if(values[s].indexOf(dig) != -1)
+                dplaces.push(s);
+        }
+        if(dplaces.length === 0) return false;
+        else if(dplaces.length === 1 && !assign(values, dplaces[0], dig)) return false;
+    }
+    return values;
+}
+
+function assign(values, sq, dig){ // Eliminate all the other values (except dig) from values[sq] and propagate.
+    var result = true;
+    var vals = values[sq];
+    for (var d = 0; d < vals.length; d++)
+        if (vals.charAt(d) !== dig)
+            result &= (eliminate(values, sq, vals.charAt(d)) ? true : false);
+    return (result ? values : false);
+}
+
+function dup(v){
+    var r = {};
+    for (var s in v)
+        r[s] = v[s];
+    return r;
+}
+
+function search(values){
+    if (!values)
+        return false;
+    var min = 10, max = 1, sq = null;
+    for (var s in sqrIdx){
+        var len =values[s].length;
+        if (len > max)
+            max = len;
+        if (len > 1 && len < min){
+            min = len;
+            sq = s;
+        }
+    }
+
+    if (max == 1)
+        return values;
+    for (var d = 0; d < len; d++){
+        var res = search(assign(dup(values), sq, values[sq].charAt(d)));
+        if (res)
+            return res;
+    }
+    return false;
+}
+
+function sudoku(In){
+    var values = {};
+    for (var s in sqrIdx)
+        values[s] = digits;
+    for(var r in In.rows){
+        var row = In.rows[r];
+        var rIdx = row.rid.toString();
+        for(var c in row.cols){
+            var col = row.cols[c];
+            if(col.vl !== ""){
+                if(!assign(values, rIdx + col.cid.toString(), col.vl))
+                    return false;
+            }
+        }
+    }
+    return search(values);
+}
+
 var sudokuApp = angular.module("sudokuApp", []);
 
 sudokuApp.factory('mySudokuService', ['$http', function($http){
@@ -399,14 +529,38 @@ sudokuApp.factory('mySudokuService', ['$http', function($http){
         return puzzleData.mirror[rid + ' ' + cid];
     };
     var solve = function(){
-        $http(req).success(function(data){
-            puzzleData.solvable = data.solvable;
-            if(puzzleData.solvable) puzzleData.solution = data.puzzle;
-            else puzzleData.solution = puzzleData.oData;
-            puzzleData.showres = true;
-        }).error(function(){
-            alert('error');
-        })
+        //$http(req).success(function(data){
+        //    puzzleData.solvable = data.solvable;
+        //    if(puzzleData.solvable) puzzleData.solution = data.puzzle;
+        //    else puzzleData.solution = puzzleData.oData;
+        //    puzzleData.showres = true;
+        //}).error(function(){
+        //    alert('error');
+        //})
+        var solution = sudoku(puzzleData.oData);
+        if(!solution){
+            puzzleData.solvable = false;
+            puzzleData.solution = puzzleData.oData;
+        }else{
+            puzzleData.solvable = true;
+            puzzleData.solution = {};
+            puzzleData.solution.rows = [];
+            for(var r in ls){
+                var row = {};
+                var rid = parseInt(r);
+                row.rid = rid;
+                row.cols = [];
+                for(var c in ls){
+                    var col = {};
+                    var cid = parseInt(c);
+                    col.cid = cid;
+                    col.vl = solution[r + c];
+                    row.cols.push(col);
+                }
+                puzzleData.solution.rows.push(row);
+            }
+        }
+        puzzleData.showres = true;
     };
     return {
         puzzleData: puzzleData,
