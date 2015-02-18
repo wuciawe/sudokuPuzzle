@@ -68,7 +68,10 @@ function eliminate(values, sq, dig){
                 dplaces.push(s);
         }
         if(dplaces.length === 0) return false;
-        else if(dplaces.length === 1 && !assign(values, dplaces[0], dig)) return false;
+        else if(dplaces.length === 1){
+            if(!assign(values, dplaces[0], dig))
+                return false;
+        }
     }
     return values;
 }
